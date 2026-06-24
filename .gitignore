@@ -1,7 +1,8 @@
 node_modules
-dist
 .env
 .env.*
 *.log
 .DS_Store
 Thumbs.db
+# Don't ignore dist for GitHub Pages deployment
+# dist
