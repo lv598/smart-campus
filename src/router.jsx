@@ -1,6 +1,7 @@
 import React from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import App from './App'
+import LoginPage from './components/LoginPage'
 import Dashboard from './pages/Dashboard'
 import Academics from './pages/Academics'
 import Schedule from './pages/Schedule'
@@ -26,11 +27,30 @@ function NotFound() {
   )
 }
 
+// Protected route wrapper
+function ProtectedRoute({ children }) {
+  const token = localStorage.getItem('token')
+  const location = useLocation()
+
+  if (!token) {
+    return <Navigate to="/login" state={{ from: location }} replace />
+  }
+
+  return children
+}
+
 function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<App />}>
+        <Route path="/login" element={<LoginPage />} />
+        <Route
+          element={
+            <ProtectedRoute>
+              <App />
+            </ProtectedRoute>
+          }
+        >
           <Route path="/" element={<Dashboard />} />
           <Route path="/academics" element={<Academics />} />
           <Route path="/schedule" element={<Schedule />} />
